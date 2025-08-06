@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">SharedPreferences to DataStore</string>
+
+    <string name="onboarding_dialog_title">Welcome to the app with magic feature</string>
+    <string name="ask_me_anything_text">Ask me anything…</string>
+    <string name="are_willing_to_title">Are you willing to trade personal data for a magic feature?</string>
+    <string name="lets_go_text">Let\'s go</string>
+    <string name="are_willing_to_button_text">Just some basic stuff.</string>
+    <string name="magic_feature_usage_text">You can now use the magic feature!</string>
+    <string name="user_page_title">User</string>
+    <string name="three_word_description_text">Write 3 word that describe you best (use , as a separator)</string>
+    <string name="three_word_error_text">Please enter exactly 3 words</string>
+    <string name="three_word_hint_text">ambitious, tenacious, funny</string>
+    <string name="where_are_you_located_text">Where are you located?\nLong press and Add pin to the map</string>
+    <string name="name_text">Fist Name</string>
+    <string name="surname_text">Last Name</string>
+    <string name="upload_photo_text">Upload photo</string>
+    <string name="edit_photo_text">Edit photo</string>
+    <string name="rate_android_knowledge_text">Rate your Android knowledge</string>
+    <string name="dark_theme_text">Dark Theme</string>
+    <string name="light_theme_text">Light Theme</string>
+    <string name="your_data_title">Your data</string>
+    <string name="clear_data_button_text">Clear data</string>
+    <string name="save_data_button_text">Save data</string>
+    <string name="are_you_sure_dialog_title">Go back without saving?</string>
+    <string name="are_you_sure_dialog_text">Yeah, I don\'t feel like saving</string>
+    <string name="are_you_sure_negative_dialog_text">No, let me save it</string>
+    <string name="timestamp_dialog_title">That\'s it, for now</string>
+    <string name="timestamp_dialog_text">Listen, if you keep this question asking rate up, the world is going to run out of electricity.\n\nCome back again in: </string>
+    <string name="ok_text">OK</string>
+    <string name="onboarding_i_agree_text">Yes, I agree</string>
+    <string name="onboarding_am_no_text">Am, no.</string>
+    <string name="permission_granted_text">Permission granted</string>
+    <string name="permission_denied_text">Permission denied</string>
+    <string name="pick_from_gallery_text">Pick from Gallery</string>
+    <string name="take_picture_text">Take Picture</string>
+    <string name="modal_title">Choose Image Source</string>
+    <string name="onboarding_dialog_text">
+    Effective Date: July 25, 2025\n\n
+    Please read these Terms and Conditions ("Terms", "Agreement") carefully before using this application. This Agreement sets forth the legally binding terms and conditions for your use of the app and its related services.\n\n
+    By accessing or using the application in any manner, including but not limited to visiting, browsing, or contributing content, you agree to be bound by these Terms.\n\n
+
+    1. Use of Service\n
+    You agree to use the service only for purposes permitted by these Terms and in compliance with all applicable local, state, national, and international laws and regulations. You must not use the service in any way that could damage, disable, overburden, or impair our servers or networks.\n\n
+
+    2. Account Registration\n
+    In order to access certain features of the app, you may be required to register an account. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate and complete. You are responsible for safeguarding your password and other login credentials.\n\n
+
+    3. Intellectual Property\n
+    All content, trademarks, service marks, trade names, logos, and icons are the property of the company or its licensors and are protected by applicable copyright and trademark laws. You may not reproduce, distribute, or create derivative works without explicit permission.\n\n
+
+    4. User Content\n
+    You retain ownership of any content you submit, post, or display on or through the service. However, by submitting content, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and distribute such content for the purpose of providing and improving the service.\n\n
+
+    5. Prohibited Activities\n
+    You agree not to engage in any of the following:\n
+    - Violating laws or third-party rights.\n
+    - Uploading malicious code or viruses.\n
+    - Attempting to gain unauthorized access to the system.\n
+    - Harassing, abusing, or harming other users.\n\n
+
+    6. Termination\n
+    We reserve the right to suspend or terminate your access to the service at any time, with or without notice, for conduct that we believe violates these Terms or is otherwise harmful to other users, us, or third parties.\n\n
+
+    7. Limitation of Liability\n
+    To the fullest extent permitted by law, the company shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the service.\n\n
+
+    8. Indemnification\n
+    You agree to indemnify and hold harmless the company, its affiliates, officers, agents, and employees from any claim or demand arising out of your use of the service or your violation of these Terms.\n\n
+
+    9. Changes to Terms\n
+    We reserve the right to update or change these Terms at any time. Any changes will be effective immediately upon posting. Continued use of the service after any changes indicates your acceptance of the new Terms.\n\n
+
+    10. Contact Us\n
+    If you have any questions about these Terms, please contact us at support@example.com.
+</string>
+
+</resources>

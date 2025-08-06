@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SharedPreferencesToDataStore" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <style name="Theme.SharedPreferencesToDataStore.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="postSplashScreenTheme">@style/Theme.SharedPreferencesToDataStore</item>
+    </style>
+
+</resources>
