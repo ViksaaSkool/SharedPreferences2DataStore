@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SharedPreferences to DataStore</string>
+    <string name="app_name">Sp2Ds</string>
 
     <string name="onboarding_dialog_title">Welcome to the app with magic feature</string>
     <string name="ask_me_anything_text">Ask me anything…</string>
