@@ -24,6 +24,7 @@ import com.droidconlisbon.sp2ds.ui.composables.dialog.OnboardingDialog
 import com.droidconlisbon.sp2ds.ui.composables.dialog.TimestampDialog
 import com.droidconlisbon.sp2ds.ui.theme.SharedPreferencesToDataStoreTheme
 import com.droidconlisbon.sp2ds.util.hideSoftKeyboardOnOutsideClick
+import com.droidconlisbon.sp2ds.util.showToast
 
 
 @SuppressLint("ContextCastToActivity")
@@ -37,9 +38,11 @@ fun HomeScreen(
     var isTimestampDialogOpen by remember { mutableStateOf(false) }
     val homeScreenDataState by viewModel.homeScreenDataStateFlow.collectAsState()
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         with(homeScreenDataState) {
             if (!hasBeenOnboarded) {
                 OnboardingDialog(onDisagreeClick = {
@@ -68,6 +71,10 @@ fun HomeScreen(
                 NoDataEnteredContainer(modifier = modifier) {
                     navController.navigate(DATA_SCREEN)
                 }
+            }
+
+            if (errorMessage.isNotEmpty()) {
+                activity?.showToast(errorMessage)
             }
         }
     }

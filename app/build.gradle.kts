@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.protobuf)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.hilt.android)
-    id("kotlin-kapt")
+   // id("kotlin-kapt")
 }
 
 val openRouterKey: String = project.rootProject
@@ -21,6 +21,15 @@ val openRouterKey: String = project.rootProject
 android {
     namespace = "com.droidconlisbon.sp2ds"
     compileSdk = 36
+
+    packaging {
+        resources {
+            excludes += listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md"
+            )
+        }
+    }
 
     defaultConfig {
         applicationId = "com.droidconlisbon.sp2ds"
@@ -119,15 +128,12 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.android.compiler)
 
-    // If you use Glide annotations like @GlideModule
-    kapt(libs.glide.core)
-    implementation(libs.glide.core)
-    implementation(libs.glide.okhttp)
-    implementation(libs.glide.compose)
-
     //other
     implementation(libs.lottie.compose)
     implementation(libs.compose.markdown)
+    implementation(libs.glide.core)
+    implementation(libs.glide.okhttp)
+    implementation(libs.glide.compose)
 
     //Testing
     testImplementation(libs.junit)
@@ -137,7 +143,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.protobuf.javalite)
     testImplementation(libs.protobuf.javalite)
-    kspAndroidTest(libs.hilt.compiler)
     testImplementation(libs.hilt.testing)
     androidTestImplementation(libs.hilt.testing)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
 }

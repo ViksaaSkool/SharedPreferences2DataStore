@@ -19,7 +19,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".Sp2DsApplication"
+        android:name="com.droidconlisbon.sp2ds.Sp2DsApplication"
         android:usesCleartextTraffic="true"
         android:exported="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
