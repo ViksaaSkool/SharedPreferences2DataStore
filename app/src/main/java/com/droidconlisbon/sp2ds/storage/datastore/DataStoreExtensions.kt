@@ -22,11 +22,11 @@ import java.io.File
 @Suppress("UNCHECKED_CAST")
 fun <T> Class<T>.toPreferenceKey(key: String): Preferences.Key<T> {
     return when (this) {
-        Boolean::class.java -> booleanPreferencesKey(key) as Preferences.Key<T>
-        Int::class.java -> intPreferencesKey(key) as Preferences.Key<T>
-        Long::class.java -> longPreferencesKey(key) as Preferences.Key<T>
+        Boolean::class.java, java.lang.Boolean.TYPE -> booleanPreferencesKey(key) as Preferences.Key<T>
+        Int::class.java, java.lang.Integer.TYPE -> intPreferencesKey(key) as Preferences.Key<T>
+        Long::class.java, java.lang.Long.TYPE -> longPreferencesKey(key) as Preferences.Key<T>
         String::class.java -> stringPreferencesKey(key) as Preferences.Key<T>
-        Float::class -> floatPreferencesKey(key)as Preferences.Key<T>
+        Float::class.java, java.lang.Float.TYPE -> floatPreferencesKey(key) as Preferences.Key<T>
         Set::class.java, MutableSet::class.java -> stringSetPreferencesKey(key) as Preferences.Key<T>
         else -> throw IllegalArgumentException("Unsupported type: ${this.simpleName}")
     }
@@ -109,18 +109,3 @@ inline fun <reified T> simplifiedDataStorePropertyFlow(
         default = default
     )
 }
-
-suspend fun DataStore<Preferences>.printAllPrefs() {
-    val prefs = data.first()
-    prefs.asMap().forEach { (key, value) ->
-        Timber.d("migrateToProtoStore() | ${key.name} = $value")
-    }
-}
-
-fun <T> Context.createProtoDataStore(
-    fileName: String,
-    serializer: Serializer<T>
-): DataStore<T> = DataStoreFactory.create(
-    serializer = serializer,
-    produceFile = { File(this.filesDir, "datastore/$fileName") }
-)

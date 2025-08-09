@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.droidconlisbon.sp2ds.R
-import com.droidconlisbon.sp2ds.model.User
+import com.droidconlisbon.sp2ds.proto.User
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingHuge
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingMedium
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingStandard
@@ -166,7 +166,11 @@ fun UserComponent(
 @Composable
 fun UserComponentPreview() = SharedPreferencesToDataStoreTheme {
     UserComponent(
-        user = User(),
+        user = User.newBuilder()
+            .setFirstName("")
+            .setLastName("")
+            .setPicUri("")
+            .build(),
         onImageUriChanged = {},
         onLastNameChanged = {},
         onFirstNameChanged = {})

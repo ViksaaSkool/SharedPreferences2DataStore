@@ -44,10 +44,12 @@ fun HomeScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         with(homeScreenDataState) {
-            if (!hasBeenOnboarded) {
-                OnboardingDialog(onDisagreeClick = {
-                    activity?.finishAffinity()
-                }, onAgreeClick = { viewModel.onTermsAccepted() })
+            hasBeenOnboarded?.let {
+                if (!it) {
+                    OnboardingDialog(onDisagreeClick = {
+                        activity?.finishAffinity()
+                    }, onAgreeClick = { viewModel.onTermsAccepted() })
+                }
             }
             if (hasPopulatedData) {
                 ChatContainer(

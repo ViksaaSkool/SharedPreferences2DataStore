@@ -1,7 +1,7 @@
 package com.droidconlisbon.sp2ds
 
 import com.droidconlisbon.sp2ds.network.ChatService
-import com.droidconlisbon.sp2ds.storage.sharedpreferences.Sp2DsSharedPreferencesManager
+import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.ui.composables.data.ThemeViewModel
 import com.droidconlisbon.sp2ds.ui.composables.home.HomeViewModel
 import io.mockk.MockKAnnotations
@@ -13,7 +13,7 @@ import org.junit.Before
 class HomeViewModelTest {
 
     @MockK
-    private lateinit var mockSharedPreferences: Sp2DsSharedPreferencesManager
+    private lateinit var mockSp2DsStore: Sp2DsDataStore
 
     @MockK
     private lateinit var mockChatService: ChatService
@@ -25,7 +25,7 @@ class HomeViewModelTest {
         MockKAnnotations.init(this)
         viewModel = HomeViewModel(
             chatService = mockChatService,
-            sharedPreferencesManager = mockSharedPreferences
+            sp2DataStore = mockSp2DsStore
         )
     }
 

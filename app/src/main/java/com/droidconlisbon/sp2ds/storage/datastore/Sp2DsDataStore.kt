@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.Flow
 interface Sp2DsDataStore {
 
     var hasProtoBeenMigrated: Boolean
-    var isOnboardingShowFlow: Flow<Boolean>
+    var isOnboardingShownFlow: Flow<Boolean>
     var userFlow: Flow<User>
     var threeWordDescriptionFlow: Flow<List<String>>
     var isDarkTheme: Boolean
     var questionsLeft: Int
     var timeoutTimestamp: String
-    var experienceLevel: Float
+    var androidRate: Float
     var chatMessagesFlow: Flow<List<ChatMessage>>
     suspend fun hasStoredValidData(): Boolean
     fun clearData(): Unit

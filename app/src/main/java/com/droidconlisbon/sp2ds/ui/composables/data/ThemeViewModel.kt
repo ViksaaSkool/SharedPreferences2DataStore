@@ -2,7 +2,7 @@ package com.droidconlisbon.sp2ds.ui.composables.data
 
 
 import androidx.lifecycle.ViewModel
-import com.droidconlisbon.sp2ds.storage.sharedpreferences.Sp2DsSharedPreferencesManager
+import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,14 +15,14 @@ abstract class IThemeViewModel : ViewModel() {
 }
 
 @HiltViewModel
-class ThemeViewModel @Inject constructor(val sharedPreferencesManager: Sp2DsSharedPreferencesManager) :
+class ThemeViewModel @Inject constructor(val sp2DataStore: Sp2DsDataStore) :
     IThemeViewModel() {
 
-    private val _isDarkThemeStateFlow = MutableStateFlow(sharedPreferencesManager.isDarkTheme)
+    private val _isDarkThemeStateFlow = MutableStateFlow(sp2DataStore.isDarkTheme)
     override val isDarkThemeStateFlow = _isDarkThemeStateFlow.asStateFlow()
 
     override fun onThemeChanged(isDarkTheme: Boolean) {
         _isDarkThemeStateFlow.value = isDarkTheme
-        sharedPreferencesManager.isDarkTheme = isDarkTheme
+        sp2DataStore.isDarkTheme = isDarkTheme
     }
 }

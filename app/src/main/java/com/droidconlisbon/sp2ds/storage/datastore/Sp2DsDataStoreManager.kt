@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.droidconlisbon.sp2ds.coroutine.CoroutineProvider
-import com.droidconlisbon.sp2ds.model.toUser
 import com.droidconlisbon.sp2ds.proto.ChatMessage
 import com.droidconlisbon.sp2ds.proto.User
 import com.droidconlisbon.sp2ds.storage.Constants.CHAT_MESSAGES_LIST_KEY
@@ -22,6 +21,7 @@ import com.droidconlisbon.sp2ds.storage.Constants.USER_KEY
 import com.droidconlisbon.sp2ds.storage.datastore.proto.ChatMessagesListDataStorePropertyFlow
 import com.droidconlisbon.sp2ds.storage.datastore.proto.StringListDataStorePropertyFlow
 import com.droidconlisbon.sp2ds.storage.datastore.proto.UserDataStorePropertyFlow
+import com.droidconlisbon.sp2ds.storage.datastore.proto.isValid
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -43,7 +43,7 @@ class Sp2DsDataStoreManager @Inject constructor(
         key = HAS_BEEN_MIGRATED_TO_PROTO_KEY,
         default = false
     )
-    override var isOnboardingShowFlow: Flow<Boolean> by simplifiedDataStorePropertyFlow(
+    override var isOnboardingShownFlow: Flow<Boolean> by simplifiedDataStorePropertyFlow(
         coroutineScope = coroutineScope,
         dataStore = dataStore,
         key = ONBOARDING_SHOWN_KEY,
@@ -77,7 +77,7 @@ class Sp2DsDataStoreManager @Inject constructor(
         key = TIMEOUT_TIMESTAMP_KEY,
         default = ""
     )
-    override var experienceLevel: Float by simplifiedDataStoreProperty(
+    override var androidRate: Float by simplifiedDataStoreProperty(
         coroutineScope = coroutineScope,
         dataStore = dataStore,
         key = EXPERIENCE_LEVEL_KEY,
@@ -91,7 +91,7 @@ class Sp2DsDataStoreManager @Inject constructor(
     )
 
     override suspend fun hasStoredValidData(): Boolean {
-        return userFlow.first().toUser().isValid() && threeWordDescriptionFlow.first().isNotEmpty()
+        return userFlow.first().isValid() && threeWordDescriptionFlow.first().isNotEmpty()
     }
 
 

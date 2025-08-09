@@ -7,7 +7,7 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import com.droidconlisbon.sp2ds.proto.ChatMessage
 import com.droidconlisbon.sp2ds.proto.ChatMessageList
-import com.droidconlisbon.sp2ds.storage.datastore.createProtoDataStore
+import com.droidconlisbon.sp2ds.proto.MessageType
 import com.droidconlisbon.sp2ds.util.toProtoStoreName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,4 +69,14 @@ class ChatMessagesListDataStorePropertyFlow(
             }
         }
     }
+}
+
+fun ChatMessage.set(
+    message: String,
+    messageType: MessageType
+): ChatMessage {
+    return newBuilderForType()
+        .setMessage(message)
+        .setMessageType(messageType)
+        .build()
 }

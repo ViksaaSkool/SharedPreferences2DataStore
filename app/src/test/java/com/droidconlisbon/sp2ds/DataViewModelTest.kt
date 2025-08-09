@@ -1,7 +1,8 @@
 package com.droidconlisbon.sp2ds
 
+import androidx.datastore.core.DataStore
 import com.droidconlisbon.sp2ds.network.ChatService
-import com.droidconlisbon.sp2ds.storage.sharedpreferences.Sp2DsSharedPreferencesManager
+import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.ui.composables.data.DataViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -12,7 +13,7 @@ import org.junit.Before
 class DataViewModelTest {
 
     @MockK
-    private lateinit var mockSharedPreferences: Sp2DsSharedPreferencesManager
+    private lateinit var mockSp2DsStore: Sp2DsDataStore
 
     @MockK
     private lateinit var mockChatService: ChatService
@@ -22,9 +23,6 @@ class DataViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        viewModel = DataViewModel(
-            sharedPreferencesManager = mockSharedPreferences
-        )
     }
 
 

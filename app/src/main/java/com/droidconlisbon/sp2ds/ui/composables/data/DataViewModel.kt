@@ -3,11 +3,15 @@ package com.droidconlisbon.sp2ds.ui.composables.data
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.droidconlisbon.sp2ds.storage.sharedpreferences.Sp2DsSharedPreferencesManager
+import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,110 +30,117 @@ abstract class IDataViewModel : ViewModel() {
 
 
 @HiltViewModel
-class DataViewModel @Inject constructor(val sharedPreferencesManager: Sp2DsSharedPreferencesManager) :
-    IDataViewModel() {
+class DataViewModel @Inject constructor(
+    private val sp2DataStore: Sp2DsDataStore
+) : IDataViewModel() {
 
     private val _dataScreenStateFlow = MutableStateFlow(DataScreenState())
     override val dataScreenStateFlow = _dataScreenStateFlow.asStateFlow()
 
-    private var dataScreenStateJob: Job? = null
-    private fun updateDataScreenState(dataScreenStateFlow: DataScreenState) {
-        dataScreenStateJob?.cancel()
-        dataScreenStateJob = viewModelScope.launch {
-            _dataScreenStateFlow.emit(dataScreenStateFlow)
-        }
-    }
+    private val combinedDataFlow = combine(
+        sp2DataStore.userFlow,
+        sp2DataStore.threeWordDescriptionFlow,
+        flowOf(sp2DataStore.androidRate)
+    ) { user, description, rate ->
+        DataScreenState(
+            user = user,
+            description = description,
+            androidRate = rate
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = DataScreenState()
+    )
 
     init {
-        with(sharedPreferencesManager) {
-            val initialState = DataScreenState(
-                user = user,
-                description = threeWordDescription,
-                androidRate = androidRate
+        // Collect combinedDataFlow and update canSave and canClear reactively
+        viewModelScope.launch {
+            combinedDataFlow.collect { baseState ->
+                val canSave = calculateCanSave(baseState)
+                val canClear = baseState.hasDataChangedFromDefault()
+                _dataScreenStateFlow.emit(
+                    baseState.copy(canSave = canSave, canClear = canClear)
+                )
+            }
+        }
+    }
+
+
+    private fun updateState(update: DataScreenState.() -> DataScreenState) {
+        val current = _dataScreenStateFlow.value
+        val updatedBase = current.update()
+
+        viewModelScope.launch {
+            _dataScreenStateFlow.emit(
+                updatedBase
             )
-            updateAndEmit(initialState)
         }
+        updateButtons(updatedBase)
+
     }
 
-    override fun onImageUriChanged(uri: Uri) {
-        with(_dataScreenStateFlow.value) {
-            val updatedState = copy(
-                user = user.copy(picUri = uri.toString())
-            )
-            updateAndEmit(updatedState)
-        }
+    private fun updateButtons(state: DataScreenState) = viewModelScope.launch {
+        val buttonsState = _dataScreenStateFlow.value.copy(
+            canSave = calculateCanSave(state),
+            canClear = state.hasDataChangedFromDefault()
+        )
+        _dataScreenStateFlow.emit(buttonsState)
     }
 
-    override fun onFirstNameChanged(firstName: String) {
-        with(_dataScreenStateFlow.value) {
-            val updatedState = copy(
-                user = user.copy(firstName = firstName)
-            )
-            updateAndEmit(updatedState)
-        }
+    override fun onImageUriChanged(uri: Uri) = updateState {
+        copy(user = user.toBuilder().setPicUri(uri.toString()).build())
     }
 
-    override fun onLastNameChanged(lastName: String) {
-        with(_dataScreenStateFlow.value) {
-            val updatedState = copy(
-                user = user.copy(lastName = lastName)
-            )
-            updateAndEmit(updatedState)
-        }
+    override fun onFirstNameChanged(firstName: String) = updateState {
+        copy(user = user.toBuilder().setFirstName(firstName).build())
     }
 
-    override fun onRateChange(value: Float) {
-        with(_dataScreenStateFlow.value) {
-            val updatedState = copy(androidRate = value)
-            updateAndEmit(updatedState)
-        }
+    override fun onLastNameChanged(lastName: String) = updateState {
+        copy(user = user.toBuilder().setLastName(lastName).build())
     }
 
+    override fun onRateChange(value: Float) = updateState {
+        copy(androidRate = value)
+    }
 
-    override fun onDescriptionChanged(description: List<String>) {
-        with(_dataScreenStateFlow.value) {
-            val updatedState = copy(description = description)
-            updateAndEmit(updatedState)
-        }
+    override fun onDescriptionChanged(description: List<String>) = updateState {
+        copy(description = description)
     }
 
     override fun clearData() {
-        with(sharedPreferencesManager) {
-            clearSharedPreferences()
-            val updatedState = _dataScreenStateFlow.value.copy(
-                user = user,
-                description = threeWordDescription,
-                androidRate = androidRate
-            )
-            updateAndEmit(updatedState)
+        viewModelScope.launch {
+            sp2DataStore.clearData()
         }
+        updateState { DataScreenState() }
+        updateButtons(DataScreenState())
     }
 
     override fun onSaveData() {
         super.onSaveData()
-        val currentData = _dataScreenStateFlow.value
-        sharedPreferencesManager.apply {
-            user = currentData.user
-            threeWordDescription = currentData.description
-            androidRate = currentData.androidRate
+        val current = _dataScreenStateFlow.value
+
+        // Save current data into datastore; ideally expose proper setters instead of overwriting flows
+        viewModelScope.launch {
+            sp2DataStore.apply {
+                userFlow = flowOf(current.user)
+                threeWordDescriptionFlow = flowOf(current.description)
+                androidRate = current.androidRate
+            }
         }
-        updateAndEmit(currentData)
     }
 
-    private fun calculateCanSave(state: DataScreenState) = state.isDataValid()
-            && state.hasDataBeenChanged(
-        u = sharedPreferencesManager.user,
-        desc = sharedPreferencesManager.threeWordDescription,
-        rate = sharedPreferencesManager.androidRate
-    )
+    private suspend fun calculateCanSave(state: DataScreenState): Boolean {
+        val pair = combine(
+            sp2DataStore.userFlow,
+            sp2DataStore.threeWordDescriptionFlow
+        ) { user, desc -> Pair(user, desc) }
+            .first()
 
-    private fun updateAndEmit(state: DataScreenState) {
-        updateDataScreenState(
-            state.copy(
-                canSave = calculateCanSave(state),
-                canClear = state.hasDataChangedFromDefault()
-            )
-        )
+        return state.hasDataBeenChanged(
+            u = pair.first,
+            desc = pair.second,
+            rate = sp2DataStore.androidRate
+        ) && state.isDataValid()
     }
-
 }

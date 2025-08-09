@@ -27,6 +27,7 @@ class Sp2DsApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        migrateProto()
     }
 
     private fun migrateProto() = scope.launch(Dispatchers.IO) {

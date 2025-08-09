@@ -1,10 +1,15 @@
 package com.droidconlisbon.sp2ds.ui.composables.data
 
-import com.droidconlisbon.sp2ds.model.User
+
+import com.droidconlisbon.sp2ds.proto.User
 import com.droidconlisbon.sp2ds.storage.Constants.DEFAULT_EXPERIENCE_LEVEL_VALUE
 
 data class DataScreenState(
-    var user: User = User(),
+    var user: User = User.newBuilder()
+        .setFirstName("")
+        .setLastName("")
+        .setPicUri("")
+        .build(),
     var description: List<String> = emptyList(),
     var androidRate: Float = 5.0f,
     var canClear: Boolean = false,

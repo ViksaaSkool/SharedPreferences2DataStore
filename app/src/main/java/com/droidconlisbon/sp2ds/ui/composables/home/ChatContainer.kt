@@ -50,9 +50,8 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.droidconlisbon.sp2ds.R
-import com.droidconlisbon.sp2ds.model.ChatMessage
-import com.droidconlisbon.sp2ds.model.MessageType
-import com.droidconlisbon.sp2ds.model.isAnswer
+import com.droidconlisbon.sp2ds.proto.ChatMessage
+import com.droidconlisbon.sp2ds.proto.MessageType
 import com.droidconlisbon.sp2ds.storage.Constants.DEFAULT_WRITING_SPEED_VALUE
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingMedium
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingSmall
@@ -122,14 +121,10 @@ fun ChatContainer(
 fun ChatContainerPreview() = SharedPreferencesToDataStoreTheme {
     ChatContainer(
         messages = listOf(
-            ChatMessage(
-                "This is a test Question",
-                messageType = MessageType.QUESTION
-            ),
-            ChatMessage(
-                "This is a test Answer",
-                messageType = MessageType.ANSWER
-            )
+            ChatMessage.newBuilder().setMessage("This is a test Question")
+                .setMessageType(MessageType.QUESTION).build(),
+            ChatMessage.newBuilder().setMessage("This is a test Answer")
+                .setMessageType(MessageType.ANSWER).build()
         ),
         isLoading = false,
         avatarUri = "",
@@ -164,7 +159,7 @@ fun LoadingPreview() = SharedPreferencesToDataStoreTheme {
 
 @Composable
 fun ChatBubble(message: ChatMessage, animateAnswer: Boolean = false, onFinished: () -> Unit) {
-    val isUser = !message.messageType.isAnswer()
+    val isUser = message.messageType == MessageType.QUESTION
     val bubbleColor =
         if (isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
 
@@ -207,14 +202,14 @@ fun ChatBubble(message: ChatMessage, animateAnswer: Boolean = false, onFinished:
 fun ChatBubblePreview() = SharedPreferencesToDataStoreTheme {
     Column {
         ChatBubble(
-            ChatMessage(
-                "This is a test Question",
-                messageType = MessageType.QUESTION
-            )
-        ) {}
+            ChatMessage.newBuilder().setMessage("This is a test Question")
+                .setMessageType(MessageType.QUESTION).build(),
+
+            ) {}
         Spacer(modifier = Modifier.height(spacingMedium))
         ChatBubble(
-            ChatMessage("This is a test Answer", messageType = MessageType.ANSWER),
+            ChatMessage.newBuilder().setMessage("This is a test Answer")
+                .setMessageType(MessageType.ANSWER).build(),
             animateAnswer = true
         ) {}
     }

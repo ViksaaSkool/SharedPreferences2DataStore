@@ -5,9 +5,7 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import com.droidconlisbon.sp2ds.proto.ChatMessage
 import com.droidconlisbon.sp2ds.proto.User
-import com.droidconlisbon.sp2ds.storage.datastore.createProtoDataStore
 import com.droidconlisbon.sp2ds.util.toProtoStoreName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,3 +61,5 @@ class UserDataStorePropertyFlow(
     }
 
 }
+
+fun User.isValid() = firstName.isNotEmpty() && lastName.isNotEmpty() && picUri.isNotEmpty()
