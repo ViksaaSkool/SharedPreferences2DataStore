@@ -4,10 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.protobuf)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.hilt.android)
-   // id("kotlin-kapt")
 }
 
 val openRouterKey: String = project.rootProject
@@ -67,25 +65,6 @@ android {
     buildToolsVersion = "36.0.0"
 }
 
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.25.1"
-    }
-
-    // Generates the java Protobuf-lite code for the Protobufs in this project. See
-    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-    // for more information.
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                create("java") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -115,13 +94,6 @@ dependencies {
     ksp(libs.moshi.ksp)
     api(libs.moshi.converter)
     api(libs.moshi.adapters)
-
-    //Datastore
-    implementation(libs.androidx.datastore)
-    implementation(libs.androidx.datastore.core)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.datastore.preferences.core)
-    implementation(libs.protobuf.javalite)
 
     //Hilt
     implementation(libs.hilt.android.core)

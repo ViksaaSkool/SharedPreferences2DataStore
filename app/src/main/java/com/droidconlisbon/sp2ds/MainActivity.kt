@@ -15,16 +15,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.droidconlisbon.sp2ds.coroutine.CoroutineProvider
 import com.droidconlisbon.sp2ds.navigation.Sp2DsNavigation
-import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.ui.composables.data.ThemeViewModel
 import com.droidconlisbon.sp2ds.ui.theme.SharedPreferencesToDataStoreTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

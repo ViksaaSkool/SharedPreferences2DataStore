@@ -9,9 +9,7 @@ object Constants {
     const val DEFAULT_WRITING_SPEED_VALUE = 30L
 
     const val SHARED_PREFERENCES_NAME = "Sp2Ds_sharedpreferences"
-    const val DATASTORE_NAME = "Sp2Ds_datastore"
 
-    const val HAS_BEEN_MIGRATED_TO_PROTO_KEY = "HAS_BEEN_MIGRATED_TO_PROTO_KEY" //boolean
     const val USER_KEY = "USER_KEY" //object
     const val THREE_WORDS_DESCRIPTION_KEY = "THREE_WORDS_DESCRIPTION_KEY" //object
     const val CHAT_MESSAGES_LIST_KEY = "CHAT_MESSAGES_LIST_KEY" //object
