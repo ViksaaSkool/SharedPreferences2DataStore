@@ -76,9 +76,7 @@ class DataViewModel @Inject constructor(
         val updatedBase = current.update()
 
         viewModelScope.launch {
-            _dataScreenStateFlow.emit(
-                updatedBase
-            )
+            _dataScreenStateFlow.emit(updatedBase)
         }
         updateButtons(updatedBase)
 
@@ -90,7 +88,7 @@ class DataViewModel @Inject constructor(
             canSave = calculateCanSave(state.copy()),
             canClear = state.copy().hasDataChangedFromDefault()
         )
-        _dataScreenStateFlow.emit(buttonsState)
+        _dataScreenStateFlow.value = buttonsState
     }
 
     override fun onImageUriChanged(uri: Uri) = updateState {

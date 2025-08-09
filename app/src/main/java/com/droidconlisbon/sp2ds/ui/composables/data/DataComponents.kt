@@ -59,10 +59,12 @@ import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingStandard
 import com.droidconlisbon.sp2ds.ui.theme.SharedPreferencesToDataStoreTheme
 import com.droidconlisbon.sp2ds.util.createUriForImage
 import com.droidconlisbon.sp2ds.util.getString
+import com.droidconlisbon.sp2ds.util.hasThreeCommaSeparatedWords
 import com.droidconlisbon.sp2ds.util.requestPermissionAndLaunch
 import com.droidconlisbon.sp2ds.util.showToast
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.text.split
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -259,12 +261,10 @@ fun AndroidKnowledgeComponentPreview() = SharedPreferencesToDataStoreTheme {
 @Composable
 fun CommaSeparatedComponent(
     initialValue: String = "",
-    onValuesChange: (List<String>) -> Unit
+    onDescriptionChange: (List<String>) -> Unit
 ) {
     val errorText = R.string.three_word_error_text.getString()
-    var text by remember { mutableStateOf(initialValue) }
     var error by remember { mutableStateOf<String?>(null) }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -278,16 +278,17 @@ fun CommaSeparatedComponent(
         )
 
         OutlinedTextField(
-            value = text,
-            onValueChange = {
-                text = it
-                val parts = it.split(",").map { s -> s.trim() }.filter { s -> s.isNotEmpty() }
-                if (parts.size == 3) {
-                    error = null
-                    onValuesChange(parts)
-                } else {
-                    error = errorText
+            value = initialValue,
+            onValueChange = { value ->
+                with(value) {
+                    error = if (value.hasThreeCommaSeparatedWords()) {
+                        null
+                    } else {
+                        errorText
+                    }
+                    onDescriptionChange(split(","))
                 }
+
             },
             label = { Text(R.string.three_word_hint_text.getString()) },
             isError = error != null,

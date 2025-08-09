@@ -116,4 +116,8 @@ private fun Context.createJPGFile(): File = File.createTempFile(
 fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) =
     Toast.makeText(this, message, duration).show()
 
-fun List<String>.toCommaSeparatedString() = toString().replace("]", "").replace("[", "")
+fun List<String>.toCommaSeparatedString() = joinToString(",")
+
+fun String.hasThreeCommaSeparatedWords() = split(",")
+    .map { it.trim() }
+    .filter { it.isNotEmpty() }.size == 3

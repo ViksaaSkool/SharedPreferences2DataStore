@@ -44,7 +44,6 @@ import com.droidconlisbon.sp2ds.util.hideSoftKeyboardOnOutsideClick
 import com.droidconlisbon.sp2ds.util.showToast
 import com.droidconlisbon.sp2ds.util.toCommaSeparatedString
 import kotlinx.coroutines.flow.MutableStateFlow
-import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,8 +113,8 @@ fun DataScreen(
                     } else {
                         dataScreenState.description.toCommaSeparatedString()
                     }
-                ) {
-                    viewModel.onDescriptionChanged(it)
+                ) { input ->
+                    viewModel.onDescriptionChanged(input)
                 }
                 Spacer(modifier = Modifier.height(spacingSmall))
                 AndroidKnowledgeComponent(dataScreenState.androidRate) {
@@ -132,6 +131,7 @@ fun DataScreen(
                         navController.navigate(HOME_SCREEN)
                     }, onClearClick = {
                         viewModel.clearData()
+                        themeViewModel.onThemeChanged(true)
                     })
                 Spacer(modifier = Modifier.height(spacingBig))
             }
