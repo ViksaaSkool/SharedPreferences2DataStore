@@ -118,7 +118,6 @@ class DataViewModel @Inject constructor(
             sp2DataStore.clearData()
         }
         updateState { DataScreenState() }
-        //updateButtons(DataScreenState())
     }
 
     override fun onSaveData() {
