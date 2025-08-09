@@ -41,9 +41,6 @@ class Sp2DsMigratorManager @Inject constructor(
     )
 
     override suspend fun migrateToProtoStore() {
-        if (sp2DsDataStore.hasProtoBeenMigrated) {
-            return
-        }
         coroutineScope {
             val jobs = listOf(
                 async {

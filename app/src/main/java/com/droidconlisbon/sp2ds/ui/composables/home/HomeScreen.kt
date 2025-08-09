@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,11 +21,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.droidconlisbon.sp2ds.navigation.Routes.DATA_SCREEN
+import com.droidconlisbon.sp2ds.ui.composables.data.DataScreenState
 import com.droidconlisbon.sp2ds.ui.composables.dialog.OnboardingDialog
 import com.droidconlisbon.sp2ds.ui.composables.dialog.TimestampDialog
 import com.droidconlisbon.sp2ds.ui.theme.SharedPreferencesToDataStoreTheme
 import com.droidconlisbon.sp2ds.util.hideSoftKeyboardOnOutsideClick
 import com.droidconlisbon.sp2ds.util.showToast
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @SuppressLint("ContextCastToActivity")
@@ -44,6 +47,9 @@ fun HomeScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         with(homeScreenDataState) {
+            if (!isInitialized) {
+                return
+            }
             hasBeenOnboarded?.let {
                 if (!it) {
                     OnboardingDialog(onDisagreeClick = {
@@ -74,7 +80,6 @@ fun HomeScreen(
                     navController.navigate(DATA_SCREEN)
                 }
             }
-
             if (errorMessage.isNotEmpty()) {
                 activity?.showToast(errorMessage)
             }
@@ -89,5 +94,8 @@ fun HomeScreen(
 @Composable
 fun HomeContainerPreview() = SharedPreferencesToDataStoreTheme {
     val navController = rememberNavController()
-    HomeScreen(navController = navController, viewModel = object : IHomeViewModel() {})
+    HomeScreen(navController = navController, viewModel = object : IHomeViewModel() {
+        override val homeScreenDataStateFlow: MutableStateFlow<HomeScreenDataState> =
+            MutableStateFlow(HomeScreenDataState().copy(isInitialized = true))
+    })
 }

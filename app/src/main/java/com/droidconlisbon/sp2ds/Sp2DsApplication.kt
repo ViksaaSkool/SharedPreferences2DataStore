@@ -34,8 +34,13 @@ class Sp2DsApplication : Application() {
 
     }
 
-    private fun migrateProto() = scope.launch(Dispatchers.IO) {
-        sp2DsMigrator.migrateToProtoStore()
-        sp2DsDataStore.hasProtoBeenMigrated = true
+    private fun migrateProto() {
+        if (sp2DsDataStore.hasProtoBeenMigrated) {
+            return
+        }
+        scope.launch(Dispatchers.IO) {
+            sp2DsMigrator.migrateToProtoStore()
+            sp2DsDataStore.hasProtoBeenMigrated = true
+        }
     }
 }

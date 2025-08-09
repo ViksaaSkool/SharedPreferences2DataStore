@@ -48,8 +48,12 @@ class HomeViewModel @Inject constructor(
     init {
         with(sp2DataStore) {
             viewModelScope.launch {
-                val triple = combine(userFlow, chatMessagesFlow, isOnboardingShownFlow) { user, chatMessages, isOnboardingShown ->
-                    Triple(user, chatMessages, isOnboardingShown )
+                val triple = combine(
+                    userFlow,
+                    chatMessagesFlow,
+                    isOnboardingShownFlow
+                ) { user, chatMessages, isOnboardingShown ->
+                    Triple(user, chatMessages, isOnboardingShown)
                 }.first()
                 updateHomeDataStateState(
                     HomeScreenDataState(
@@ -57,7 +61,8 @@ class HomeViewModel @Inject constructor(
                         hasBeenOnboarded = triple.third,
                         timeOutTimestamp = timeoutTimestamp,
                         avatarUri = triple.first.picUri,
-                        hasPopulatedData = hasStoredValidData()
+                        hasPopulatedData = hasStoredValidData(),
+                        isInitialized = true
                     )
                 )
             }

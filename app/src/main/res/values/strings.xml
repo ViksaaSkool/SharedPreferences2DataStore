@@ -10,7 +10,7 @@
     <string name="user_page_title">User</string>
     <string name="three_word_description_text">Write 3 word that describe you best (use , as a separator)</string>
     <string name="three_word_error_text">Please enter exactly 3 words</string>
-    <string name="three_word_hint_text">ambitious, tenacious, funny</string>
+    <string name="three_word_hint_text">Example: ambitious, tenacious, funny</string>
     <string name="where_are_you_located_text">Where are you located?\nLong press and Add pin to the map</string>
     <string name="name_text">Fist Name</string>
     <string name="surname_text">Last Name</string>

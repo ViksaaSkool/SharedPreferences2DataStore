@@ -5,6 +5,7 @@ import com.droidconlisbon.sp2ds.proto.User
 import com.droidconlisbon.sp2ds.storage.Constants.DEFAULT_EXPERIENCE_LEVEL_VALUE
 
 data class DataScreenState(
+    var isInitialized: Boolean = false,
     var user: User = User.newBuilder()
         .setFirstName("")
         .setLastName("")

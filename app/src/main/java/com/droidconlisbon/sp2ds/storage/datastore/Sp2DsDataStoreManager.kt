@@ -100,13 +100,13 @@ class Sp2DsDataStoreManager @Inject constructor(
             dataStore.edit { preferences ->
                 preferences.clear()
             }
+            clearProto()
         }
-        clearProto()
     }
 
     private fun clearProto() {
         userFlow = flowOf(User.getDefaultInstance())
-        threeWordDescriptionFlow = flowOf( emptyList())
+        threeWordDescriptionFlow = flowOf(emptyList())
         chatMessagesFlow = flowOf(emptyList())
     }
 }

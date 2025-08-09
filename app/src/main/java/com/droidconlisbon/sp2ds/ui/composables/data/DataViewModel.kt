@@ -13,7 +13,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.Boolean
+import kotlin.concurrent.timer
 
 abstract class IDataViewModel : ViewModel() {
     open fun clearData() = Unit
@@ -45,7 +48,8 @@ class DataViewModel @Inject constructor(
         DataScreenState(
             user = user,
             description = description,
-            androidRate = rate
+            androidRate = rate,
+            isInitialized = true
         )
     }.stateIn(
         scope = viewModelScope,
@@ -82,8 +86,9 @@ class DataViewModel @Inject constructor(
 
     private fun updateButtons(state: DataScreenState) = viewModelScope.launch {
         val buttonsState = _dataScreenStateFlow.value.copy(
-            canSave = calculateCanSave(state),
-            canClear = state.hasDataChangedFromDefault()
+            isInitialized = true,
+            canSave = calculateCanSave(state.copy()),
+            canClear = state.copy().hasDataChangedFromDefault()
         )
         _dataScreenStateFlow.emit(buttonsState)
     }
@@ -113,7 +118,7 @@ class DataViewModel @Inject constructor(
             sp2DataStore.clearData()
         }
         updateState { DataScreenState() }
-        updateButtons(DataScreenState())
+        //updateButtons(DataScreenState())
     }
 
     override fun onSaveData() {

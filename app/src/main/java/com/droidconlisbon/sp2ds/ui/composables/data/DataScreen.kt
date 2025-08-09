@@ -42,6 +42,9 @@ import com.droidconlisbon.sp2ds.ui.theme.SharedPreferencesToDataStoreTheme
 import com.droidconlisbon.sp2ds.util.getString
 import com.droidconlisbon.sp2ds.util.hideSoftKeyboardOnOutsideClick
 import com.droidconlisbon.sp2ds.util.showToast
+import com.droidconlisbon.sp2ds.util.toCommaSeparatedString
+import kotlinx.coroutines.flow.MutableStateFlow
+import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,56 +84,59 @@ fun DataScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .hideSoftKeyboardOnOutsideClick(localFocusManager)
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(spacingSmall))
-            ThemeToggle(isDarkTheme = isDarkThemeState) {
-                themeViewModel.onThemeChanged(it)
-            }
-            UserComponent(
-                user = dataScreenState.user,
-                onImageUriChanged = {
-                    viewModel.onImageUriChanged(it.toUri())
-                },
-                onFirstNameChanged = {
-                    viewModel.onFirstNameChanged(it)
-                },
-                onLastNameChanged = {
-                    viewModel.onLastNameChanged(it)
-                })
-            Spacer(modifier = Modifier.height(spacingSmall))
-            CommaSeparatedComponent(
-                initialValue = if (dataScreenState.description.isEmpty()) {
-                    ""
-                } else {
-                    dataScreenState.description.toString()
-                }
+        if (dataScreenState.isInitialized) {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .hideSoftKeyboardOnOutsideClick(localFocusManager)
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
             ) {
-                viewModel.onDescriptionChanged(it)
-            }
-            Spacer(modifier = Modifier.height(spacingSmall))
-            AndroidKnowledgeComponent(dataScreenState.androidRate) {
-                viewModel.onRateChange(it)
-            }
-            Spacer(modifier = Modifier.height(spacingSmall))
-            DataButtons(
-                isSaveEnabled = dataScreenState.canSave,
-                isClearEnabled = dataScreenState.canClear, onSaveClick = {
-                    viewModel.onSaveData()
-                    context.run {
-                        showToast(getString(R.string.magic_feature_usage_text))
+                Spacer(modifier = Modifier.height(spacingSmall))
+                ThemeToggle(isDarkTheme = isDarkThemeState) {
+                    themeViewModel.onThemeChanged(it)
+                }
+                UserComponent(
+                    user = dataScreenState.user,
+                    onImageUriChanged = {
+                        viewModel.onImageUriChanged(it.toUri())
+                    },
+                    onFirstNameChanged = {
+                        viewModel.onFirstNameChanged(it)
+                    },
+                    onLastNameChanged = {
+                        viewModel.onLastNameChanged(it)
+                    })
+                Spacer(modifier = Modifier.height(spacingSmall))
+                CommaSeparatedComponent(
+                    initialValue = if (dataScreenState.description.isEmpty()) {
+                        ""
+                    } else {
+                        dataScreenState.description.toCommaSeparatedString()
                     }
-                    navController.navigate(HOME_SCREEN)
-                }, onClearClick = {
-                    viewModel.clearData()
-                })
-            Spacer(modifier = Modifier.height(spacingBig))
+                ) {
+                    viewModel.onDescriptionChanged(it)
+                }
+                Spacer(modifier = Modifier.height(spacingSmall))
+                AndroidKnowledgeComponent(dataScreenState.androidRate) {
+                    viewModel.onRateChange(it)
+                }
+                Spacer(modifier = Modifier.height(spacingSmall))
+                DataButtons(
+                    isSaveEnabled = dataScreenState.canSave,
+                    isClearEnabled = dataScreenState.canClear, onSaveClick = {
+                        viewModel.onSaveData()
+                        context.run {
+                            showToast(getString(R.string.magic_feature_usage_text))
+                        }
+                        navController.navigate(HOME_SCREEN)
+                    }, onClearClick = {
+                        viewModel.clearData()
+                    })
+                Spacer(modifier = Modifier.height(spacingBig))
+            }
         }
+
     }
     if (goBackDialogOpen) {
         GoBackDialog(onGoBack = {
@@ -157,6 +163,9 @@ fun DataScreenPreview() = SharedPreferencesToDataStoreTheme {
     val navController = rememberNavController()
     DataScreen(
         navController = navController,
-        viewModel = object : IDataViewModel() {},
+        viewModel = object : IDataViewModel() {
+            override val dataScreenStateFlow: MutableStateFlow<DataScreenState> =
+                MutableStateFlow(DataScreenState().copy(isInitialized = true))
+        },
         themeViewModel = object : IThemeViewModel() {})
 }
