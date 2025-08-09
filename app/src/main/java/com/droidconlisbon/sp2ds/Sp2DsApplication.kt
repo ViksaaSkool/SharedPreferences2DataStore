@@ -2,6 +2,7 @@ package com.droidconlisbon.sp2ds
 
 import android.app.Application
 import com.droidconlisbon.sp2ds.coroutine.CoroutineProvider
+import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsMigrator
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -12,6 +13,8 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class Sp2DsApplication : Application() {
+    @Inject
+    lateinit var sp2DsDataStore: Sp2DsDataStore
 
     @Inject
     lateinit var sp2DsMigrator: Sp2DsMigrator
@@ -28,9 +31,11 @@ class Sp2DsApplication : Application() {
             Timber.plant(Timber.DebugTree())
         }
         migrateProto()
+
     }
 
     private fun migrateProto() = scope.launch(Dispatchers.IO) {
         sp2DsMigrator.migrateToProtoStore()
+        sp2DsDataStore.hasProtoBeenMigrated = true
     }
 }

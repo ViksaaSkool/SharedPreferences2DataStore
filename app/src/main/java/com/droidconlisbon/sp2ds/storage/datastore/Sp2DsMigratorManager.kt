@@ -3,11 +3,13 @@ package com.droidconlisbon.sp2ds.storage.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.droidconlisbon.sp2ds.proto.ChatMessage
-import com.droidconlisbon.sp2ds.proto.User
 import com.droidconlisbon.sp2ds.storage.Constants.CHAT_MESSAGES_LIST_KEY
 import com.droidconlisbon.sp2ds.storage.Constants.THREE_WORDS_DESCRIPTION_KEY
 import com.droidconlisbon.sp2ds.storage.Constants.USER_KEY
+import com.droidconlisbon.sp2ds.storage.datastore.proto.ChatMessageData
+import com.droidconlisbon.sp2ds.storage.datastore.proto.UserData
+import com.droidconlisbon.sp2ds.storage.datastore.proto.toProto
+import com.droidconlisbon.sp2ds.storage.datastore.proto.toProtoList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,11 +26,11 @@ class Sp2DsMigratorManager @Inject constructor(
     moshi: Moshi
 ) : Sp2DsMigrator {
 
-    private val userAdapter = moshi.adapter(User::class.java)
-    private val chatMessagesAdapter = moshi.adapter<List<ChatMessage>>(
+    private val userAdapter = moshi.adapter(UserData::class.java)
+    private val chatMessagesAdapter = moshi.adapter<List<ChatMessageData>>(
         Types.newParameterizedType(
             List::class.java,
-            ChatMessage::class.java
+            ChatMessageData::class.java
         )
     )
     private val listOfStringsAdapter = moshi.adapter<List<String>>(
@@ -47,11 +49,11 @@ class Sp2DsMigratorManager @Inject constructor(
                 async {
                     migrateProperty(USER_KEY) { jsonValue ->
                         val userValue = if (jsonValue.isNotEmpty()) {
-                            userAdapter.fromJson(jsonValue) ?: User.getDefaultInstance()
+                            userAdapter.fromJson(jsonValue) ?: UserData()
                         } else {
-                            User.getDefaultInstance()
+                            UserData()
                         }
-                        sp2DsDataStore.userFlow = flowOf(userValue)
+                        sp2DsDataStore.userFlow = flowOf(userValue.toProto())
                     }
                 },
                 async {
@@ -61,7 +63,7 @@ class Sp2DsMigratorManager @Inject constructor(
                         } else {
                             emptyList()
                         }
-                        sp2DsDataStore.chatMessagesFlow = flowOf(messages)
+                        sp2DsDataStore.chatMessagesFlow = flowOf(messages.toProtoList())
                     }
                 },
                 async {
@@ -76,15 +78,13 @@ class Sp2DsMigratorManager @Inject constructor(
                 }
             )
             jobs.awaitAll()
-            sp2DsDataStore.hasProtoBeenMigrated = true
         }
 
     }
 
-    private suspend fun migrateProperty(key: String, migrate: (jsonValue: String) -> Unit) =
-        with(key) {
-            val jsonValue = dataStore.readAndDelete(key, "")
-            migrate(jsonValue)
-        }
+    private suspend fun migrateProperty(key: String, migrate: (jsonValue: String) -> Unit) {
+        val jsonValue = dataStore.readAndDelete(key, "")
+        migrate(jsonValue)
+    }
 
 }

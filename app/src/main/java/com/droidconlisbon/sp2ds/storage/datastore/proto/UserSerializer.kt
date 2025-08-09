@@ -63,3 +63,18 @@ class UserDataStorePropertyFlow(
 }
 
 fun User.isValid() = firstName.isNotEmpty() && lastName.isNotEmpty() && picUri.isNotEmpty()
+
+data class UserData(
+    val firstName: String = "",
+    val lastName: String = "",
+    val picUri: String = ""
+)
+
+// From domain User to ProtoUser
+fun UserData.toProto(): User {
+    return User.newBuilder()
+        .setFirstName(firstName)
+        .setLastName(lastName)
+        .setPicUri(picUri)
+        .build()
+}

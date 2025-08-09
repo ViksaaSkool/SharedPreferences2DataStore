@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-
 import java.io.InputStream
 import java.io.OutputStream
 import kotlin.properties.ReadWriteProperty
@@ -71,12 +70,27 @@ class ChatMessagesListDataStorePropertyFlow(
     }
 }
 
-fun ChatMessage.set(
-    message: String,
-    messageType: MessageType
-): ChatMessage {
-    return newBuilderForType()
+
+data class ChatMessageData(val message: String, val messageType: MessageDataType)
+
+enum class MessageDataType {
+    ANSWER,
+    QUESTION
+}
+
+
+fun ChatMessageData.toProto(): ChatMessage {
+    return ChatMessage.newBuilder()
         .setMessage(message)
-        .setMessageType(messageType)
+        .setMessageType(
+            when (messageType) {
+                MessageDataType.ANSWER -> MessageType.ANSWER
+                MessageDataType.QUESTION -> MessageType.QUESTION
+            }
+        )
         .build()
+}
+
+fun List<ChatMessageData>.toProtoList(): List<ChatMessage> {
+    return this.map { it.toProto() }
 }
