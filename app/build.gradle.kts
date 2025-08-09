@@ -35,8 +35,8 @@ android {
         applicationId = "com.droidconlisbon.sp2ds"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "OPEN_ROUTER_KEY", "\"$openRouterKey\"")
