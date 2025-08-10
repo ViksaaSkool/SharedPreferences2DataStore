@@ -2,17 +2,13 @@ package com.droidconlisbon.sp2ds.ui.composables.data
 
 
 import android.annotation.SuppressLint
-import com.droidconlisbon.sp2ds.proto.User
+import com.droidconlisbon.sp2ds.model.User
 import com.droidconlisbon.sp2ds.storage.Constants.DEFAULT_EXPERIENCE_LEVEL_VALUE
 import timber.log.Timber
 
 data class DataScreenState(
     var isInitialized: Boolean = false,
-    var user: User = User.newBuilder()
-        .setFirstName("")
-        .setLastName("")
-        .setPicUri("")
-        .build(),
+    var user: User = User(),
     var description: List<String> = emptyList(),
     var androidRate: Float = 5.0f,
     var canClear: Boolean = false,

@@ -13,10 +13,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.Boolean
-import kotlin.concurrent.timer
 
 abstract class IDataViewModel : ViewModel() {
     open fun clearData() = Unit
@@ -40,30 +38,31 @@ class DataViewModel @Inject constructor(
     private val _dataScreenStateFlow = MutableStateFlow(DataScreenState())
     override val dataScreenStateFlow = _dataScreenStateFlow.asStateFlow()
 
-    private val combinedDataFlow = combine(
-        sp2DataStore.userFlow,
-        sp2DataStore.threeWordDescriptionFlow,
-    ) { user, description->
-        DataScreenState(
-            user = user,
-            description = description,
-            androidRate = sp2DataStore.androidRate,
-            isInitialized = true
-        )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = DataScreenState()
-    )
-
     init {
-
         viewModelScope.launch {
-            combinedDataFlow.collect { baseState ->
+            with(sp2DataStore) {
+                val pair = combine(
+                    sp2DataStore.userFlow,
+                    sp2DataStore.threeWordDescriptionFlow,
+                ) { user, description ->
+                    Pair(user, description)
+                }.first()
+                val baseState = DataScreenState(
+                    user = pair.first,
+                    description = pair.second,
+                    androidRate = androidRate
+                )
                 val canSave = calculateCanSave(baseState)
                 val canClear = baseState.hasDataChangedFromDefault()
                 _dataScreenStateFlow.emit(
-                    baseState.copy(canSave = canSave, canClear = canClear)
+                    _dataScreenStateFlow.value.copy(
+                        user = pair.first,
+                        description = pair.second,
+                        androidRate = androidRate,
+                        isInitialized = true,
+                        canSave = canSave,
+                        canClear = canClear
+                    )
                 )
             }
         }
@@ -91,15 +90,15 @@ class DataViewModel @Inject constructor(
     }
 
     override fun onImageUriChanged(uri: Uri) = updateState {
-        copy(user = user.toBuilder().setPicUri(uri.toString()).build())
+        copy(user = user.copy(picUri = uri.toString()))
     }
 
     override fun onFirstNameChanged(firstName: String) = updateState {
-        copy(user = user.toBuilder().setFirstName(firstName).build())
+        copy(user = user.copy(firstName = firstName))
     }
 
     override fun onLastNameChanged(lastName: String) = updateState {
-        copy(user = user.toBuilder().setLastName(lastName).build())
+        copy(user = user.copy(lastName = lastName))
     }
 
     override fun onRateChange(value: Float) = updateState {

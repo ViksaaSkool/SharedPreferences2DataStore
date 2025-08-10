@@ -10,26 +10,26 @@ message ListOfString {
   repeated string item = 1;
 }
 
-message User {
+message UserProto {
   string firstName = 1;
   string lastName = 2;
   string picUri = 3;
 }
 
 
-enum MessageType {
+enum MessageTypeProto {
   MESSAGE_TYPE_UNSPECIFIED = 0;
   ANSWER = 1;
   QUESTION = 2;
 }
 
 // Individual chat message
-message ChatMessage {
+message ChatMessageProto {
   string message = 1;
-  MessageType messageType = 2;
+  MessageTypeProto messageType = 2;
 }
 
 // Wrapper for list of chat messages
 message ChatMessageList {
-  repeated ChatMessage messages = 1;
+  repeated ChatMessageProto messages = 1;
 }

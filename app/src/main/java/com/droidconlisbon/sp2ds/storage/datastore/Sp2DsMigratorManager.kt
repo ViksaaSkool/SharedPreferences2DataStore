@@ -3,13 +3,11 @@ package com.droidconlisbon.sp2ds.storage.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.droidconlisbon.sp2ds.model.ChatMessage
+import com.droidconlisbon.sp2ds.model.User
 import com.droidconlisbon.sp2ds.storage.Constants.CHAT_MESSAGES_LIST_KEY
 import com.droidconlisbon.sp2ds.storage.Constants.THREE_WORDS_DESCRIPTION_KEY
 import com.droidconlisbon.sp2ds.storage.Constants.USER_KEY
-import com.droidconlisbon.sp2ds.storage.datastore.proto.ChatMessageData
-import com.droidconlisbon.sp2ds.storage.datastore.proto.UserData
-import com.droidconlisbon.sp2ds.storage.datastore.proto.toProto
-import com.droidconlisbon.sp2ds.storage.datastore.proto.toProtoList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,11 +24,11 @@ class Sp2DsMigratorManager @Inject constructor(
     moshi: Moshi
 ) : Sp2DsMigrator {
 
-    private val userAdapter = moshi.adapter(UserData::class.java)
-    private val chatMessagesAdapter = moshi.adapter<List<ChatMessageData>>(
+    private val userAdapter = moshi.adapter(User::class.java)
+    private val chatMessagesAdapter = moshi.adapter<List<ChatMessage>>(
         Types.newParameterizedType(
             List::class.java,
-            ChatMessageData::class.java
+            ChatMessage::class.java
         )
     )
     private val listOfStringsAdapter = moshi.adapter<List<String>>(
@@ -46,11 +44,11 @@ class Sp2DsMigratorManager @Inject constructor(
                 async {
                     migrateProperty(USER_KEY) { jsonValue ->
                         val userValue = if (jsonValue.isNotEmpty()) {
-                            userAdapter.fromJson(jsonValue) ?: UserData()
+                            userAdapter.fromJson(jsonValue) ?: User()
                         } else {
-                            UserData()
+                            User()
                         }
-                        sp2DsDataStore.userFlow = flowOf(userValue.toProto())
+                        sp2DsDataStore.userFlow = flowOf(userValue)
                     }
                 },
                 async {
@@ -60,7 +58,7 @@ class Sp2DsMigratorManager @Inject constructor(
                         } else {
                             emptyList()
                         }
-                        sp2DsDataStore.chatMessagesFlow = flowOf(messages.toProtoList())
+                        sp2DsDataStore.chatMessagesFlow = flowOf(messages)
                     }
                 },
                 async {

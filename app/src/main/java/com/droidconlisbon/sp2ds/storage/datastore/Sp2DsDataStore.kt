@@ -1,7 +1,8 @@
 package com.droidconlisbon.sp2ds.storage.datastore
 
-import com.droidconlisbon.sp2ds.proto.ChatMessage
-import com.droidconlisbon.sp2ds.proto.User
+
+import com.droidconlisbon.sp2ds.model.ChatMessage
+import com.droidconlisbon.sp2ds.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface Sp2DsDataStore {

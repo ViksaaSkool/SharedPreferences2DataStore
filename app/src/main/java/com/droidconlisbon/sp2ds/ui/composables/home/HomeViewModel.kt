@@ -2,11 +2,11 @@ package com.droidconlisbon.sp2ds.ui.composables.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.droidconlisbon.sp2ds.model.ChatMessage
+import com.droidconlisbon.sp2ds.model.MessageType
 import com.droidconlisbon.sp2ds.network.ChatService
 import com.droidconlisbon.sp2ds.network.data.ChatResponse
 import com.droidconlisbon.sp2ds.network.data.ResultWrapper
-import com.droidconlisbon.sp2ds.proto.ChatMessage
-import com.droidconlisbon.sp2ds.proto.MessageType
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.util.hasMinutesPassed
 import com.droidconlisbon.sp2ds.util.toFormattedDate
@@ -136,7 +136,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getUpdatedList(query: String, type: MessageType): MutableList<ChatMessage> {
         val resultList = _homeScreenDataStateFlow.value.copy().chatMessages
-        resultList.add(ChatMessage.newBuilder().setMessage(query).setMessageType(type).build())
+        resultList.add(ChatMessage(query, type))
         sp2DataStore.chatMessagesFlow = flowOf(resultList)
         return resultList
     }

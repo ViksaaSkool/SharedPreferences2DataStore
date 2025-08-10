@@ -2,7 +2,7 @@ package com.droidconlisbon.sp2ds.ui.composables.home
 
 
 import android.annotation.SuppressLint
-import com.droidconlisbon.sp2ds.proto.ChatMessage
+import com.droidconlisbon.sp2ds.model.ChatMessage
 import timber.log.Timber
 
 data class HomeScreenDataState(

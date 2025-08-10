@@ -3,8 +3,6 @@ package com.droidconlisbon.sp2ds.ui.composables.data
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -39,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.droidconlisbon.sp2ds.R
-import com.droidconlisbon.sp2ds.navigation.Routes.HOME_SCREEN
 import com.droidconlisbon.sp2ds.ui.composables.dialog.GoBackDialog
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingBig
 import com.droidconlisbon.sp2ds.ui.theme.Dimens.spacingSmall
