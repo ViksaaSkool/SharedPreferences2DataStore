@@ -1,7 +1,9 @@
 package com.droidconlisbon.sp2ds.ui.composables.home
 
 
+import android.annotation.SuppressLint
 import com.droidconlisbon.sp2ds.proto.ChatMessage
+import timber.log.Timber
 
 data class HomeScreenDataState(
     var isInitialized: Boolean = false,
@@ -13,3 +15,18 @@ data class HomeScreenDataState(
     val hasPopulatedData: Boolean = true,
     val isLoading: Boolean = false
 )
+
+@SuppressLint("BinaryOperationInTimber")
+fun HomeScreenDataState.logData(tag : String) {
+    Timber.d(
+        "HomeScreenDataState() $tag | " +
+                "isInitialized = $isInitialized, " +
+                "hasBeenOnboarded = $hasBeenOnboarded, " +
+                "chatMessages = $chatMessages, " +
+                "timeOutTimestamp = $timeOutTimestamp, " +
+                "avatarUri = $avatarUri, " +
+                "errorMessage = $errorMessage, " +
+                "hasPopulatedData = $hasPopulatedData, " +
+                "isLoading = $isLoading"
+    )
+}

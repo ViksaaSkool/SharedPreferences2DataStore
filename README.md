@@ -5,7 +5,7 @@
 ## Demo
 
 <img src="pics/pic_1.png" width="200" height="400"/> <img src="pics/pic_2.png" width="200" height="400"/> <img src="pics/pic_3.png" width="200" height="400"/>
-<img src="pics/pic_4.png" width="200" height="400"/> <img src="pics/pic_5.png" width="200" height="400"/>
+<img src="pics/pic_4.png" width="200" height="400"/> <img src="pics/pic_5.png" width="200" height="400"/> <img src="pics/pic_6.png" width="200" height="400"/>
 
 ## About 
 

@@ -1,8 +1,10 @@
 package com.droidconlisbon.sp2ds.ui.composables.data
 
 
+import android.annotation.SuppressLint
 import com.droidconlisbon.sp2ds.proto.User
 import com.droidconlisbon.sp2ds.storage.Constants.DEFAULT_EXPERIENCE_LEVEL_VALUE
+import timber.log.Timber
 
 data class DataScreenState(
     var isInitialized: Boolean = false,
@@ -38,3 +40,18 @@ fun DataScreenState.hasDataBeenChanged(
         || user.lastName != u.lastName
         || description.toString() != desc.toString()
         || androidRate != rate
+
+@SuppressLint("BinaryOperationInTimber")
+fun DataScreenState.logData(tag: String) {
+    Timber.d(
+        "DataScreenState() ${tag}| " +
+                "isInitialized = $isInitialized, " +
+                "user = { firstName=${user.firstName}, " +
+                "lastName=${user.lastName}, " +
+                "picUri=${user.picUri} }, " +
+                "description = $description, " +
+                "androidRate = $androidRate, " +
+                "canClear = $canClear, " +
+                "canSave = $canSave"
+    )
+}

@@ -2,6 +2,11 @@ package com.droidconlisbon.sp2ds.ui.composables.data
 
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +49,7 @@ import com.droidconlisbon.sp2ds.util.hideSoftKeyboardOnOutsideClick
 import com.droidconlisbon.sp2ds.util.showToast
 import com.droidconlisbon.sp2ds.util.toCommaSeparatedString
 import kotlinx.coroutines.flow.MutableStateFlow
+import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +77,7 @@ fun DataScreen(
                         if (dataScreenState.canSave) {
                             goBackDialogOpen = true
                         } else {
-                            navController.navigate(HOME_SCREEN)
+                            navController.navigateUp()
                         }
                     }) {
                         Icon(
@@ -83,7 +89,10 @@ fun DataScreen(
             )
         }
     ) { innerPadding ->
-        if (dataScreenState.isInitialized) {
+        AnimatedVisibility(
+            dataScreenState.isInitialized,
+            enter = fadeIn(), exit = fadeOut()
+        ) {
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -128,7 +137,7 @@ fun DataScreen(
                         context.run {
                             showToast(getString(R.string.magic_feature_usage_text))
                         }
-                        navController.navigate(HOME_SCREEN)
+                        navController.navigateUp()
                     }, onClearClick = {
                         viewModel.clearData()
                         themeViewModel.onThemeChanged(true)
@@ -140,7 +149,7 @@ fun DataScreen(
     }
     if (goBackDialogOpen) {
         GoBackDialog(onGoBack = {
-            navController.navigate(HOME_SCREEN)
+            navController.navigateUp()
         }, onDismiss = {
             goBackDialogOpen = false
         })
@@ -150,7 +159,7 @@ fun DataScreen(
         if (dataScreenState.canSave) {
             goBackDialogOpen = true
         } else {
-            navController.navigate(HOME_SCREEN)
+            navController.navigateUp()
         }
 
     }

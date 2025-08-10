@@ -22,12 +22,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.droidconlisbon.sp2ds.navigation.Routes.DATA_SCREEN
 import com.droidconlisbon.sp2ds.ui.composables.data.DataScreenState
+import com.droidconlisbon.sp2ds.ui.composables.data.logData
 import com.droidconlisbon.sp2ds.ui.composables.dialog.OnboardingDialog
 import com.droidconlisbon.sp2ds.ui.composables.dialog.TimestampDialog
 import com.droidconlisbon.sp2ds.ui.theme.SharedPreferencesToDataStoreTheme
 import com.droidconlisbon.sp2ds.util.hideSoftKeyboardOnOutsideClick
 import com.droidconlisbon.sp2ds.util.showToast
 import kotlinx.coroutines.flow.MutableStateFlow
+import timber.log.Timber
 
 
 @SuppressLint("ContextCastToActivity")
@@ -40,6 +42,18 @@ fun HomeScreen(
     val localFocusManager = LocalFocusManager.current
     var isTimestampDialogOpen by remember { mutableStateOf(false) }
     val homeScreenDataState by viewModel.homeScreenDataStateFlow.collectAsState()
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+
+    val cameFromDataScreenFlow = remember {
+        savedStateHandle?.getStateFlow("cameFromDataScreen", false)
+    }
+    val cameFromDataScreen by cameFromDataScreenFlow?.collectAsState() ?: remember { mutableStateOf(false) }
+    LaunchedEffect(cameFromDataScreen) {
+        if (cameFromDataScreen) {
+            viewModel.refreshData()
+            savedStateHandle?.set("cameFromDataScreen", false)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -64,6 +78,7 @@ fun HomeScreen(
                     isLoading = isLoading,
                     messages = chatMessages,
                     onAvatarClick = {
+                        savedStateHandle?.set("cameFromDataScreen", true)
                         navController.navigate(DATA_SCREEN)
                     },
                     onAsk = { query ->
@@ -77,6 +92,7 @@ fun HomeScreen(
                 }
             } else {
                 NoDataEnteredContainer(modifier = modifier) {
+                    savedStateHandle?.set("cameFromDataScreen", true)
                     navController.navigate(DATA_SCREEN)
                 }
             }

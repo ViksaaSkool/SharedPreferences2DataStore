@@ -43,12 +43,11 @@ class DataViewModel @Inject constructor(
     private val combinedDataFlow = combine(
         sp2DataStore.userFlow,
         sp2DataStore.threeWordDescriptionFlow,
-        flowOf(sp2DataStore.androidRate)
-    ) { user, description, rate ->
+    ) { user, description->
         DataScreenState(
             user = user,
             description = description,
-            androidRate = rate,
+            androidRate = sp2DataStore.androidRate,
             isInitialized = true
         )
     }.stateIn(
@@ -58,7 +57,7 @@ class DataViewModel @Inject constructor(
     )
 
     init {
-        // Collect combinedDataFlow and update canSave and canClear reactively
+
         viewModelScope.launch {
             combinedDataFlow.collect { baseState ->
                 val canSave = calculateCanSave(baseState)
@@ -114,21 +113,17 @@ class DataViewModel @Inject constructor(
     override fun clearData() {
         viewModelScope.launch {
             sp2DataStore.clearData()
+            _dataScreenStateFlow.emit(DataScreenState().copy(isInitialized = true))
         }
-        updateState { DataScreenState() }
     }
 
     override fun onSaveData() {
         super.onSaveData()
-        val current = _dataScreenStateFlow.value
-
-        // Save current data into datastore; ideally expose proper setters instead of overwriting flows
-        viewModelScope.launch {
-            sp2DataStore.apply {
-                userFlow = flowOf(current.user)
-                threeWordDescriptionFlow = flowOf(current.description)
-                androidRate = current.androidRate
-            }
+        val current = _dataScreenStateFlow.value.copy()
+        sp2DataStore.run {
+            userFlow = flowOf(current.user)
+            threeWordDescriptionFlow = flowOf(current.description)
+            androidRate = current.androidRate
         }
     }
 

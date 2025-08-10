@@ -24,6 +24,7 @@ import javax.inject.Inject
 abstract class IHomeViewModel : ViewModel() {
     open fun onChat(query: String) = Unit
     open fun onTermsAccepted() = Unit
+    open fun refreshData() = Unit
     open val homeScreenDataStateFlow =
         MutableStateFlow(HomeScreenDataState()).asStateFlow()
 }
@@ -46,8 +47,12 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        with(sp2DataStore) {
-            viewModelScope.launch {
+        refreshData()
+    }
+
+    override fun refreshData() {
+        viewModelScope.launch {
+            with(sp2DataStore) {
                 val triple = combine(
                     userFlow,
                     chatMessagesFlow,
@@ -56,7 +61,7 @@ class HomeViewModel @Inject constructor(
                     Triple(user, chatMessages, isOnboardingShown)
                 }.first()
                 updateHomeDataStateState(
-                    HomeScreenDataState(
+                    _homeScreenDataStateFlow.value.copy(
                         chatMessages = triple.second.toMutableList(),
                         hasBeenOnboarded = triple.third,
                         timeOutTimestamp = timeoutTimestamp,
@@ -66,8 +71,6 @@ class HomeViewModel @Inject constructor(
                     )
                 )
             }
-
-
         }
     }
 
@@ -150,7 +153,7 @@ class HomeViewModel @Inject constructor(
                 return@with false
 
             } else if (timeoutTimestamp.hasMinutesPassed()) {
-                questionsLeft = 4
+                questionsLeft = 7
                 timeoutTimestamp = ""
                 updateHomeDataStateState(
                     _homeScreenDataStateFlow.value.copy(
