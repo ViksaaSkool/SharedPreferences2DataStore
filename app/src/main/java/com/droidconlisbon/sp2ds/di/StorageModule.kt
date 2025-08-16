@@ -1,7 +1,6 @@
 package com.droidconlisbon.sp2ds.di
 
 
-import androidx.annotation.Keep
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStoreManager
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsMigrator

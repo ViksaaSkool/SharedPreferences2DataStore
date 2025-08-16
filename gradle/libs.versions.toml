@@ -9,6 +9,7 @@ coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTest = "1.10.2"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
 composeBom = "2025.07.00"
@@ -33,6 +34,7 @@ image-glide-okhttp-version = '4.16.0'
 image-glide-compose = '1.0.0-beta01'
 lottie-compose-version = '6.6.7'
 playServicesLocation = "21.3.0"
+turbine = "1.2.1"
 
 
 [libraries]
@@ -58,6 +60,7 @@ androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "d
 androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -80,6 +83,7 @@ glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", versi
 glide-compose = { module = "com.github.bumptech.glide:compose", version.ref = "image-glide-compose" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose-version" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

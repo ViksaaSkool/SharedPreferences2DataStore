@@ -147,4 +147,6 @@ dependencies {
     androidTestImplementation(libs.hilt.testing)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

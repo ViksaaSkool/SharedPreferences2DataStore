@@ -2,7 +2,6 @@ package com.droidconlisbon.sp2ds
 
 import com.droidconlisbon.sp2ds.network.ChatService
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
-import com.droidconlisbon.sp2ds.ui.composables.data.ThemeViewModel
 import com.droidconlisbon.sp2ds.ui.composables.home.HomeViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK

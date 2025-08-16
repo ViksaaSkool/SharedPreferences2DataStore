@@ -1,6 +1,6 @@
 package com.droidconlisbon.sp2ds
 
-import androidx.datastore.core.DataStore
+
 import com.droidconlisbon.sp2ds.network.ChatService
 import com.droidconlisbon.sp2ds.storage.datastore.Sp2DsDataStore
 import com.droidconlisbon.sp2ds.ui.composables.data.DataViewModel
