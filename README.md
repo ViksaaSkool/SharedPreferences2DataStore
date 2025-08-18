@@ -25,7 +25,7 @@ To simulate the migration:
 
 1. checkout develop_sp branch, run the app - fill the fields and play around with it.
 2. switch to develop_ds branch, run the app - the app should keep the state as it was, but this time
-   utilizing DataStore instead of Shared preferences. NNote: when you do this switch, all the data
+   utilizing DataStore instead of Shared preferences. Note: when you do this switch, all the data
    in SharedPreferences will be deleted
 
 The presentation of the session can be accessed [here]()
