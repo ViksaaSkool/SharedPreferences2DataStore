@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -116,11 +117,14 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun getUpdatedList(query: String, type: MessageType): MutableList<ChatMessage> {
-        val resultList = _homeScreenDataStateFlow.value.copy().chatMessages
-        resultList.add(ChatMessage(message = query, messageType = type))
-        sharedPreferencesManager.chatMessages = resultList.toList()
-        return resultList
+    private fun getUpdatedList(query: String, type: MessageType): List<ChatMessage> {
+        val updatedList = _homeScreenDataStateFlow.value.chatMessages +
+                ChatMessage(message = query, messageType = type)
+        sharedPreferencesManager.chatMessages = updatedList
+        _homeScreenDataStateFlow.update { currentState ->
+            currentState.copy(chatMessages = updatedList.toMutableList())
+        }
+        return updatedList
     }
 
     fun validateState(query: String): Boolean = with(sharedPreferencesManager) {
