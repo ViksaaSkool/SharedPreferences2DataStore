@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -134,11 +135,14 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun getUpdatedList(query: String, type: MessageType): MutableList<ChatMessage> {
-        val resultList = _homeScreenDataStateFlow.value.copy().chatMessages
-        resultList.add(ChatMessage(query, type))
-        sp2DataStore.chatMessagesFlow = flowOf(resultList)
-        return resultList
+    private fun getUpdatedList(query: String, type: MessageType): List<ChatMessage> {
+        val updatedList = _homeScreenDataStateFlow.value.chatMessages +
+                ChatMessage(message = query, messageType = type)
+        sp2DataStore.chatMessagesFlow = flowOf(updatedList)
+        _homeScreenDataStateFlow.update { currentState ->
+            currentState.copy(chatMessages = updatedList.toMutableList())
+        }
+        return updatedList
     }
 
     fun validateState(query: String): Boolean = with(sp2DataStore) {

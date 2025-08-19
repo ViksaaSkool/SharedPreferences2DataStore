@@ -7,12 +7,12 @@ import com.droidconlisbon.sp2ds.storage.Constants.DEFAULT_EXPERIENCE_LEVEL_VALUE
 import timber.log.Timber
 
 data class DataScreenState(
-    var isInitialized: Boolean = false,
-    var user: User = User(),
-    var description: List<String> = emptyList(),
-    var androidRate: Float = 5.0f,
-    var canClear: Boolean = false,
-    var canSave: Boolean = false,
+    val isInitialized: Boolean = false,
+    val user: User = User(),
+    val description: List<String> = emptyList(),
+    val androidRate: Float = 5.0f,
+    val canClear: Boolean = false,
+    val canSave: Boolean = false,
 ) {
     fun isDataValid() =
         user.picUri.isNotEmpty()
