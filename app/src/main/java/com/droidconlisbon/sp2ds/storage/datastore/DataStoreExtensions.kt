@@ -23,7 +23,7 @@ import java.io.File
 fun <T> Class<T>.toPreferenceKey(key: String): Preferences.Key<T> {
     return when (this) {
         Boolean::class.java, java.lang.Boolean.TYPE -> booleanPreferencesKey(key) as Preferences.Key<T>
-        Int::class.java, java.lang.Integer.TYPE -> intPreferencesKey(key) as Preferences.Key<T>
+        Int::class.java, Integer.TYPE -> intPreferencesKey(key) as Preferences.Key<T>
         Long::class.java, java.lang.Long.TYPE -> longPreferencesKey(key) as Preferences.Key<T>
         String::class.java -> stringPreferencesKey(key) as Preferences.Key<T>
         Float::class.java, java.lang.Float.TYPE -> floatPreferencesKey(key) as Preferences.Key<T>
