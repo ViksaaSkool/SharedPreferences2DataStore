@@ -28,7 +28,7 @@ To simulate the migration:
    utilizing DataStore instead of Shared preferences. Note: when you do this switch, all the data
    in SharedPreferences will be deleted
 
-The presentation of the session can be accessed [here](pptx/Viktor-Arsovski-Droidcon-Lisbon.pdf)
+The presentation of the session can be accessed [here](https://tinyurl.com/243xvbyl)
 
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
