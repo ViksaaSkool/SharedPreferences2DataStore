@@ -9,11 +9,14 @@
 
 ## About 
 
-This is a showcase application for the [Droidcon Lisbon 2025](https://www.lisbon.droidcon.com/)
+This is a showcase application for the [Droidcon Lisbon 2025](https://www.lisbon.droidcon.com/) and 
+[Mobile Developers Week 2025](https://mobiledevelopersweek.com/)
 session: "SharedPreferences Caterpillar to DataStore Butterfly: How to Migrate and Make Your App
 Fly". The application simulates a "chatbot" that needs your personal data in order to work.
 
-<img src="pics/cover.jpg" width="600" height="400"/>
+<img src="pics/cover.jpg" width="600" height="400" alt=""/>
+<br/>
+<img src="pics/cover_abu_dhabi.png" width="400" height="600" alt=""/>
 
 - `main` branch has bot SharedPreferences and DataStore implementations, with SharedPreferences one
   being active
